@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: medical-store-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: JWT_ACCESS_EXPIRE_MINUTES
+        value: "30"
+      - key: JWT_REFRESH_EXPIRE_DAYS
+        value: "7"
+      - key: WHATSAPP_PROVIDER
+        value: aisensy
+      - key: WHATSAPP_API_KEY
+        sync: false
+      - key: WHATSAPP_API_BASE_URL
+        sync: false
+      - key: STORAGE_DIR
+        value: /app/storage
+      - key: FRONTEND_ORIGIN
+        sync: false
