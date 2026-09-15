@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body { font-family: Arial, sans-serif; font-size: 13px; color: #222; margin: 40px; }
+  h1 { font-size: 20px; margin-bottom: 0; }
+  .muted { color: #666; }
+  table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid #ddd; }
+  .totals { width: 250px; margin-left: auto; margin-top: 16px; }
+  .totals td { border: none; padding: 4px 8px; }
+  .grand-total { font-weight: bold; border-top: 2px solid #222 !important; }
+</style>
+</head>
+<body>
+  <h1>{{ client_name }}</h1>
+  <p class="muted">Invoice #{{ invoice.invoice_no }} &middot; {{ invoice.created_at.strftime("%d %b %Y") }}</p>
+  <p><strong>Billed to:</strong> {{ invoice.party_name }}</p>
+
+  <table>
+    <thead>
+      <tr><th>Medicine</th><th>Qty</th><th>Rate</th><th>GST %</th><th>Amount</th></tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td>{{ item.medicine_name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>₹{{ "%.2f"|format(item.unit_price) }}</td>
+        <td>{{ item.gst_percent }}%</td>
+        <td>₹{{ "%.2f"|format(item.quantity * item.unit_price) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <table class="totals">
+    <tr><td>Subtotal</td><td>₹{{ "%.2f"|format(invoice.subtotal) }}</td></tr>
+    <tr><td>CGST</td><td>₹{{ "%.2f"|format(invoice.gst_amount / 2) }}</td></tr>
+    <tr><td>SGST</td><td>₹{{ "%.2f"|format(invoice.gst_amount / 2) }}</td></tr>
+    <tr class="grand-total"><td>Total</td><td>₹{{ "%.2f"|format(invoice.total) }}</td></tr>
+  </table>
+</body>
+</html>
